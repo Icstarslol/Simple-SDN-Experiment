@@ -158,7 +158,7 @@ Once the network is setup it is worth generating some network traffic to refresh
 <img width="358" alt="image" src="https://github.com/user-attachments/assets/ec4878c6-19d3-4c6e-8dcb-22efa6fae8d0">
 <br/><br/>
 
-Once network traffic is generated, we can connect to the built in graphical interface (DLUX) by entering `192.168.122.122:8181/index.html` into a web browser. refresh the topology with the reload button. It is important to note that adding a new device and not generating any network traffic will mean that the OFM application will not see the newly added device.
+Once network traffic is generated, we can connect to the built in graphical interface (DLUX) by entering `192.168.122.122:8181/index.html` into a web browser. refresh the topology with the reload button. It is important to note that whenever a new device is added to the network we should generate some network traffic if needed and refresh the topology with the `Reload` button this is to ensure that the controller and OFM application will see the newly added device.
 
 <img width="592" alt="image" src="https://github.com/user-attachments/assets/cd47c03f-059a-4ece-825c-573b576121b1">
 <br/><br/>
