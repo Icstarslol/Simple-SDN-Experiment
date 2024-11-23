@@ -15,12 +15,12 @@ In order to recreate the experiemnt enviroment, we need a two key software
 GNS3 provides a robust platform for designing, simulating, and testing complex network topologies. While virtualization software is required to host the GNS3 VM and the SDN Controller used in the experiment.
 
 ## Configuring the SDN Controller
-The SDN Controller used in this experiment is an Ubuntu 20.04.6 LTS VM hosted in Virtual Box. We firstly install a few required packages
+The SDN Controller used in this experiment is an Ubuntu 20.04.6 LTS VM hosted in Virtual Box. We firstly install a few required packages.
 ```bash
 sudo apt update
 sudo apt install -y software-properties-common git nodejs
 ```
-Then we download and install the Java8 JDK
+Then we download and install the Java8 JDK.
 ```bash
 # Download the binary from https://www.oracle.com/sg/java/technologies/javase/javase8-archive-downloads.html
 sudo tar -zxvf jdk-8u202-linux-x64.tar.gz -C /opt
@@ -40,7 +40,7 @@ source ~/.bashrc
 echo $JAVA_HOME
 java -version
 ```
-Next we get OpenFlow Manager to control the flows in the OVS switch tables
+Next we get OpenFlow Manager to control the flows in the OVS switch tables.
 ```bash
 git clone https://github.com/CiscoDevNet/OpenDaylight-Openflow-App.git
 cd OpenDayLight-OpenFlow-App
@@ -53,7 +53,7 @@ grunt
 
 # We can access the application at http://<SDN Controller IP>:9000
 ```
-Finally we install and configure OpenDaylight
+Finally we install and configure OpenDaylight.
 ```bash
 wget https://nexus.opendaylight.org/content/groups/public/org/opendaylight/integration/distribution-karaf/0.3.0-Lithium/distribution-karaf-0.3.0-Lithium.tar.gz
 tar zxvf distribution-karaf-0.3.0-Lithium.tar.gz
@@ -61,20 +61,20 @@ cd distribution-karaf-0.3.0-Lithium
 ./bin/karaf
 feature:install odl-restconf-all odl-openflowplugin-all odl-l2switch-all odl-mdsal-all odl-yangtools-common
 ```
-To integrate the SDN Controller VM into GNS3
+To integrate the SDN Controller VM into GNS3.
 
 *Edit -> Preferences -> VirtualBox -> VirtualBox VMs -> New*
 
 Select the SDN Controller and import it
 
-We then edit the network settings to connect the VM to GNS3
+We then edit the network settings to connect the VM to GNS3.
 
 *Edit -> Preferences -> VirtualBox -> VirtualBox VMs -> Edit*
 
 <img width="575" alt="Screenshot 2024-11-24 015109" src="https://github.com/user-attachments/assets/c89c336c-8fa9-4777-9be5-1d264051c76d">
 
 ## Configuring the Open vSwitch
-For this experiement we will be using the Open vSwitch Management Appliance provided by GNS3
+For this experiement we will be using the Open vSwitch Management Appliance provided by GNS3.
 
 <img width="853" alt="image" src="https://github.com/user-attachments/assets/3b7a0b19-bd15-4d98-a353-70a0d65ce478">
 <br/><br/>
@@ -85,7 +85,7 @@ Before turning on the switches. Enable the management interface (eth0) to use DH
 <img width="767" alt="Screenshot 2024-11-23 181651" src="https://github.com/user-attachments/assets/5b901db1-a4e0-4ce7-9fff-c7062a941d79">
 <br/><br/>
 
-After saving the initial configuration, we run the switches and configure them using the following commands
+After saving the initial configuration, we run the switches and configure them using the following commands.
 <br/><br/>
 
 ```
@@ -95,16 +95,13 @@ ovs-vsctl set Bridge br0 stp_enable=true
 # Set the OpenFlow version to 1.3 [IMPORTANT otherwise the version of ODL we are using will not recognise the device]
 ovs-vsctl set bridge br0 protocols=OpenFlow13
 
-# View switch information e.g. dpid, no. of tables supported, no. of buffers, switch ports
-ovs-ofctl show br0
-
 # Set the SDN controller the switch will comunicate with (either ports 6633 or 6653 can be used)
 ovs-vsctl set-controller br0 tcp:<controller_ip>:6633
 ovs-vsctl show
 ```
 
 ## Configuring the Routers and Hosts
-The routers are configured with the commands listed below to enable routing throughout the network
+The routers are configured with the commands listed below to enable routing throughout the network.
 
 For R1:
 ```
@@ -148,7 +145,7 @@ network 192.168.20.0
 do sh ip route
 exit
 ```
-The two host machines are configured with static IP addresses and gateways pointing to their respective routers which can be done by right clicking the devices and selecting `Edit config`
+The two host machines are configured with static IP addresses and gateways pointing to their respective routers which can be done by right clicking the devices and selecting `Edit config`.
 
 <img width="429" alt="image" src="https://github.com/user-attachments/assets/1a2b1ca8-5f07-4e31-a28c-c45a0fd1efb6">
 
@@ -164,12 +161,12 @@ Once network traffic is generated, we can connect to the built in graphical inte
 <br/><br/>
 
 ### Analysing OpenFlow Protocol Traffic
-We can capture and analyse OpenFlow Traffic in our network by right clicking on a link and selecting `Start capture`
+We can capture and analyse OpenFlow Traffic in our network by right clicking on a link and selecting `Start capture`.
 
 <img width="192" alt="image" src="https://github.com/user-attachments/assets/80111f45-1c82-4f10-b303-50ca1e9cff93">
 <br/><br/>
 
-From there we are able to obtain a pcap file to view and analyse the various OpenFlow Protocol Packets used to establish and manage an SDN-based network
+From there we are able to obtain a pcap file to view and analyse the various OpenFlow Protocol Packets used to establish and manage an SDN-based network.
 
 <img width="752" alt="Screenshot 2024-11-24 025627" src="https://github.com/user-attachments/assets/fd70ba03-7f41-4a36-80bc-f6d6eaf4143f">
 <br/><br/>
@@ -196,9 +193,21 @@ The OFM Application we are using for the experiment is the CiscoDevNet OpenDayli
 ![image](https://github.com/user-attachments/assets/35cc5803-afdd-4c82-880b-ee05325f2f52)
 <br/><br/>
 
-From there we can see a list of OpenFlow devices currently connected to the controller and the flows currently configured in these devices
+From there we can see a list of OpenFlow devices currently connected to the controller and the flows currently configured in these devices.
 
 <img width="488" alt="image" src="https://github.com/user-attachments/assets/0194917a-0665-4f5f-8d63-75f34f855984">
 <br/><br/>
 
-For this experiement, we will be creating a new flow entry 
+For this experiement, in order to test the functionality of the application, we will be creating a new flow entry to dump all inbound traffic on eth1 (OVS2). To do so we select the pen icon in the flow management tab, select the Open vSwitch device (OVS2), input the table, ID, priority, port (eth1) and action and select the `Send all` button. 
+
+<img width="392" alt="image" src="https://github.com/user-attachments/assets/999b396f-fc84-4247-994c-e773c754b14d">
+<br/><br/>
+
+We should recieve a success message and we can see the newly added flow.
+
+<img width="489" alt="Screenshot 2024-11-24 041059" src="https://github.com/user-attachments/assets/9042656b-ce24-40db-9a3a-861f8e5c6fd4">
+<br/><br/>
+
+Now Ubuntu-1 is unable to ping Ubuntu-2. After removing the added flow entry Ubuntu-1 is now able to ping Ubuntu-2 again.
+
+<img width="338" alt="image" src="https://github.com/user-attachments/assets/4e2e326f-bba6-4129-a96c-7384b2cdb738">
