@@ -4,6 +4,7 @@ Project to create a SDN network and present functionalities of OpenFlow. Listed 
 ## Network Topology
 <img width="759" alt="image" src="https://github.com/user-attachments/assets/013ab14e-97d3-4019-a894-e94127369b0d">
 <br/><br/>
+
 This network topology is centered around a Software-Defined Networking architecture, with the OpenDaylight controller (ODL-1) running the OpenFlow Manager application acting as the heart of the network. The ODL controller, with an IP address of 192.168.75.129, is connected to a central switch, enabling centralized control and management of the entire network. Switch1 serves as a hub, interconnecting various components, including the two Open vSwitch  instances (OVS-2, OVS-3) which act as software-defined bridges to extend the SDN's reach. These switches are connected to routers R1 and R2, which form the gateways for two distinct subnets, 10.1.1.1/24 and 10.1.1.2/24, respectively. R1 connects to Ubuntu-1 (192.168.10.100), while R2 connects to Ubuntu-2 (192.168.20.100). The topology also incorporates a NAT device, which plays the role of a DHCP server for the SDN devices. This setup aims to highlight SDN's pivotal role in simplifying network management by dynamically controlling traffic flow from the centralized SDN controller.
 
 ## Setting Up the Experiement Enviroment
@@ -72,15 +73,18 @@ We then edit the network settings to connect the VM to GNS3
 
 <img width="575" alt="Screenshot 2024-11-24 015109" src="https://github.com/user-attachments/assets/c89c336c-8fa9-4777-9be5-1d264051c76d">
 
-## Configuring the Open vSwitch Management
+## Configuring the Open vSwitch
 For this experiement we will be using the Open vSwitch Management Appliance provided by GNS3
 
 <img width="853" alt="image" src="https://github.com/user-attachments/assets/3b7a0b19-bd15-4d98-a353-70a0d65ce478">
 <br/><br/>
+
 Before turning on the switches. Enable the management interface (eth0) to use DHCP by right clicking the devices and selecting `Edit config`. The NAT cloud should assign an IP Address to the interface on the same subnet as the SDN Controller.
 <br/><br/>
+
 <img width="767" alt="Screenshot 2024-11-23 181651" src="https://github.com/user-attachments/assets/5b901db1-a4e0-4ce7-9fff-c7062a941d79">
 <br/><br/>
+
 After saving the initial configuration, we run the switches and configure them using the following commands
 <br/><br/>
 
@@ -98,3 +102,63 @@ ovs-ofctl show br0
 ovs-vsctl set-controller br0 tcp:<controller_ip>:6633
 ovs-vsctl show
 ```
+
+## Configuring the Routers and Hosts
+The routers are configured with the commands listed below to enable routing throughout the network
+
+For R1:
+```
+# Configure interfaces
+conf t
+int f0/0
+no shut
+ip address 10.1.1.1 255.255.255.0
+exit
+int f0/1
+no shut
+ip address 192.168.10.1 255.255.255.0
+exit
+
+# Configure routing protocol
+router rip
+version 2
+network 10.1.1.0
+network 192.168.10.0
+do sh ip route
+exit
+```
+For R2:
+```
+# Configure interfaces
+conf t
+int f0/0
+no shut
+ip address 10.1.1.2 255.255.255.0
+exit
+int f0/1
+no shut
+ip address 192.168.20.1 255.255.255.0
+exit
+
+# Configure routing protocol
+router rip
+version 2
+network 10.1.2.0
+network 192.168.20.0
+do sh ip route
+exit
+```
+The two host machines are configured with static IP addresses and gateways pointing to their respective routers which can be done by right clicking the devices and selecting `Edit config`
+
+<img width="429" alt="image" src="https://github.com/user-attachments/assets/1a2b1ca8-5f07-4e31-a28c-c45a0fd1efb6">
+
+## Conducting the Experiemnt
+Once the network is setup it is worth generating some network traffic to refresh the list of displayed hosts in the SDN Controller.
+
+<img width="358" alt="image" src="https://github.com/user-attachments/assets/ec4878c6-19d3-4c6e-8dcb-22efa6fae8d0">
+<br/><br/>
+
+Once network traffic is generated, we can connect to the built in graphical interface (DLUX) by entering `192.168.122.122:8181/index.html` into a web browser. refresh the topology with the reload button. It is important to note that adding a new device and not generating any network traffic will mean that the OFM application will not see the newly added device.
+
+<img width="592" alt="image" src="https://github.com/user-attachments/assets/cd47c03f-059a-4ece-825c-573b576121b1">
+<br/><br/>
