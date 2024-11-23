@@ -162,3 +162,19 @@ Once network traffic is generated, we can connect to the built in graphical inte
 
 <img width="592" alt="image" src="https://github.com/user-attachments/assets/cd47c03f-059a-4ece-825c-573b576121b1">
 <br/><br/>
+
+### Analysing OpenFlow Protocol Traffic
+We can capture and analyse OpenFlow Traffic in our network by right clicking on a link and selecting `Start capture`
+
+<img width="192" alt="image" src="https://github.com/user-attachments/assets/80111f45-1c82-4f10-b303-50ca1e9cff93">
+<br/><br/>
+
+From there we are able to obtain a pcap file to view and analyse the various OpenFlow Protocol Packets used to establish and manage an SDN-based network
+
+<img width="752" alt="Screenshot 2024-11-24 025627" src="https://github.com/user-attachments/assets/fd70ba03-7f41-4a36-80bc-f6d6eaf4143f">
+<br/><br/>
+
+
+
+### Remotely Altering Flows
+
