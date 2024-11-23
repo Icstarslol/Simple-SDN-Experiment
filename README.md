@@ -92,7 +92,7 @@ After saving the initial configuration, we run the switches and configure them u
 # Enable Spanning Tree Protocol to prevent loops
 ovs-vsctl set Bridge br0 stp_enable=true
 
-# Set the OpenFlow version to 1.3 [IMPORTANT otherwise ODL will not recognise the device]
+# Set the OpenFlow version to 1.3 [IMPORTANT otherwise the version of ODL we are using will not recognise the device]
 ovs-vsctl set bridge br0 protocols=OpenFlow13
 
 # View switch information e.g. dpid, no. of tables supported, no. of buffers, switch ports
