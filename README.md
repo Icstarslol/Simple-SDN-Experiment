@@ -73,4 +73,28 @@ We then edit the network settings to connect the VM to GNS3
 <img width="575" alt="Screenshot 2024-11-24 015109" src="https://github.com/user-attachments/assets/c89c336c-8fa9-4777-9be5-1d264051c76d">
 
 ## Configuring the Open vSwitch Management
-For this experiement we will be using the 
+For this experiement we will be using the Open vSwitch Management Appliance provided by GNS3
+
+<img width="853" alt="image" src="https://github.com/user-attachments/assets/3b7a0b19-bd15-4d98-a353-70a0d65ce478">
+<br/><br/>
+Before turning on the switches. Enable the management interface (eth0) to use DHCP by right clicking the devices and selecting `Edit config`. The NAT cloud should assign an IP Address to the interface on the same subnet as the SDN Controller.
+<br/><br/>
+<img width="767" alt="Screenshot 2024-11-23 181651" src="https://github.com/user-attachments/assets/5b901db1-a4e0-4ce7-9fff-c7062a941d79">
+<br/><br/>
+After saving the initial configuration, we run the switches and configure them using the following commands
+<br/><br/>
+
+```
+# Enable Spanning Tree Protocol to prevent loops
+ovs-vsctl set Bridge br0 stp_enable=true
+
+# Set the OpenFlow version to 1.3 [IMPORTANT otherwise ODL will not recognise the device]
+ovs-vsctl set bridge br0 protocols=OpenFlow13
+
+# View switch information e.g. dpid, no. of tables supported, no. of buffers, switch ports
+ovs-ofctl show br0
+
+# Set the SDN controller the switch will comunicate with (either ports 6633 or 6653 can be used)
+ovs-vsctl set-controller br0 tcp:<controller_ip>:6633
+ovs-vsctl show
+```
