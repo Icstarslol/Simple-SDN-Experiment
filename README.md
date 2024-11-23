@@ -158,7 +158,7 @@ Once the network is setup it is worth generating some network traffic to refresh
 <img width="358" alt="image" src="https://github.com/user-attachments/assets/ec4878c6-19d3-4c6e-8dcb-22efa6fae8d0">
 <br/><br/>
 
-Once network traffic is generated, we can connect to the built in graphical interface (DLUX) by entering `192.168.122.122:8181/index.html` into a web browser. refresh the topology with the reload button. It is important to note that whenever a new device is added to the network we should generate some network traffic if needed and refresh the topology with the `Reload` button this is to ensure that the controller and OFM application will see the newly added device.
+Once network traffic is generated, we can connect to the built in graphical interface (DLUX) by entering `192.168.75.129:8181/index.html` into a web browser with the default credentials `admin:admin`. It is important to note that whenever a new device is added to the network we should generate some network traffic if needed and refresh the topology with the `Reload` button this is to ensure that the controller and OFM application will see the newly added device.
 
 <img width="592" alt="image" src="https://github.com/user-attachments/assets/cd47c03f-059a-4ece-825c-573b576121b1">
 <br/><br/>
@@ -174,7 +174,31 @@ From there we are able to obtain a pcap file to view and analyse the various Ope
 <img width="752" alt="Screenshot 2024-11-24 025627" src="https://github.com/user-attachments/assets/fd70ba03-7f41-4a36-80bc-f6d6eaf4143f">
 <br/><br/>
 
-
+* OFPT_HELLO
+   * This packet initiates the OpenFlow communication session between the controller and the switch. Both sides exchange "hello" messages to indicate their presence and confirm protocol version compatibility.
+* OFPT_FEATURES_REQUEST & REPLY
+   * After the initial handshake, the controller sends a Features Request to the switch to query its capabilities. The switch responds with a Features Reply, providing details such as datapath ID, supported OpenFlow features, and port information. This information allows the controller to understand the switch's capabilities and configure it accordingly.
+* OFPT_BARRIER_REQUEST & REPLY
+   * Barrier messages ensure synchronization between the controller and the switch. The Barrier Request is sent by the controller to confirm the completion of previous OpenFlow messages. The Barrier Reply confirms that all prior instructions have been processed, ensuring consistency in the network configuration.
+* OFPT_MULTIPART_REQUEST & REPLY
+   * These packets enable the controller to gather detailed statistics and descriptions of the switch. The Multipart Request includes types such as PORT_DESC (port details), METER_FEATURES (metering capabilities), and other switch-specific statistics. The Multipart Reply provides the requested data, which is crucial for monitoring, analytics, and fine-tuning the network.
+* OFPT_ROLE_REQUEST
+   * This packet allows the controller to define its role (e.g., master or slave) in managing the switch. Role management is important in multi-controller setups to prevent conflicts and ensure proper coordination in the SDN environment.
 
 ### Remotely Altering Flows
+To remotely alter the flows of the Open vSwitches in the network, we can connect to the OFM Application by entering `192.168.75.129:9000` through a web browser and selecting the `Flow management` tab.
 
+<img width="615" alt="Screenshot 2024-11-24 032018" src="https://github.com/user-attachments/assets/12136220-3e52-4a36-bf33-1b04389136f6">
+<br/><br/>
+
+The OFM Application we are using for the experiment is the CiscoDevNet OpenDaylight Openflow Manager Application. It uses REST APIs for the northbound API to communicate with the OpenDaylight Controller.
+
+![image](https://github.com/user-attachments/assets/35cc5803-afdd-4c82-880b-ee05325f2f52)
+<br/><br/>
+
+From there we can see a list of OpenFlow devices currently connected to the controller and the flows currently configured in these devices
+
+<img width="488" alt="image" src="https://github.com/user-attachments/assets/0194917a-0665-4f5f-8d63-75f34f855984">
+<br/><br/>
+
+For this experiement, we will be creating a new flow entry 
